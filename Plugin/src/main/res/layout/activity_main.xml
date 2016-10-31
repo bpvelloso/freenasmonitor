@@ -352,7 +352,7 @@
                 android:backgroundTint="@color/dashboard_dark_orange"
                 android:foregroundGravity="center_horizontal"
                 android:onClick="wolServer"
-                android:text="Wakeup"
+                android:text="Wake up"
                 android:textColor="@color/white"
                 android:textSize="18sp"
                 android:textStyle="bold" />
