@@ -29,6 +29,11 @@ public class CpuUsageController extends BaseController {
         final Pattern cpuOldPattern = Pattern.compile("^cpu \\s*([0-9]+) ([0-9]+) ([0-9]+) ([0-9]+) ([0-9]+) ([0-9]+) ([0-9]+) ([0-9]+)"); // Heavy cpu so do out of loops.
         final Pattern cpuNewPattern = Pattern.compile("^cpu \\s*([0-9]+) ([0-9]+) ([0-9]+) ([0-9]+) ([0-9]+) ([0-9]+) ([0-9]+) ([0-9]+) ([0-9]+) ([0-9]+)"); // Heavy cpu so do out of loops.
 
+        //CPU:  0.0% user,  0.2% nice,  0.0% system,  0.0% interrupt, 99.8% idle
+        final Pattern uptimeCpuPattern = Pattern.compile("^CPU:(.+) ([0-9]+\\.[0-9]+)% idle"); // Heavy cpu so do out of loops.
+
+
+
         final AtomicLong previousIdle = new AtomicLong(-1);
         final AtomicLong previousTotal = new AtomicLong(-1);
 
@@ -39,7 +44,8 @@ public class CpuUsageController extends BaseController {
 
                 try {
 
-                    getPluginClient().executeCommandOnSession(getSessionId(), getSessionKey(), "cat /proc/stat", new OnSessionExecuteListener() {
+                    //getPluginClient().executeCommandOnSession(getSessionId(), getSessionKey(), "cat /proc/stat", new OnSessionExecuteListener() {
+                    getPluginClient().executeCommandOnSession(getSessionId(), getSessionKey(), "top -d2 -n 0  | grep CPU", new OnSessionExecuteListener() {
 
                         @Override
                         public void onCompleted(int exitCode) {
@@ -53,11 +59,19 @@ public class CpuUsageController extends BaseController {
                         @Override
                         public void onOutputLine(String line) {
 
-                            Matcher cpuOldMatcher = cpuOldPattern.matcher(line);
-                            Matcher cpuNewMatcher = cpuNewPattern.matcher(line);
+                            //Matcher cpuOldMatcher = cpuOldPattern.matcher(line);
+                            //Matcher cpuNewMatcher = cpuNewPattern.matcher(line);
 
-                            if(cpuOldMatcher.find()){
+                            Matcher cpuMatcher = uptimeCpuPattern.matcher(line);
 
+                            if(cpuMatcher.find()){
+
+
+                                float idle = Float.valueOf(cpuMatcher.group(2));
+
+                                Log.v("CPU IDLE:", cpuMatcher.group(2));
+
+                                /*
                                 long user = Long.valueOf(cpuOldMatcher.group(1));
                                 long nice = Long.valueOf(cpuOldMatcher.group(2));
                                 long sys = Long.valueOf(cpuOldMatcher.group(3));
@@ -92,7 +106,9 @@ public class CpuUsageController extends BaseController {
                                 }
 
                                 previousIdle.set(idle);
-                                previousTotal.set(total);
+                                previousTotal.set(total);*/
+
+                                setText(((int)(100-idle))+"%");
 
                             }
                         }

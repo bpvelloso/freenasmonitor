@@ -24,9 +24,10 @@ public class FreeRamController extends BaseController {
         super.start();
 
         // Compile the regex patterns outside of the menu_main loop (cpu heavy)
-        final Pattern buffersPattern = Pattern.compile("^Buffers:\\s*([0-9]+)");
-        final Pattern freePattern = Pattern.compile("^MemFree:\\s*([0-9]+)");
-        final Pattern cachedPattern = Pattern.compile("^Cached:\\s*([0-9]+)");
+        // Mem: 326M Active, 320M Inact, 506M Wired, 7404K Cache, 2744M Free
+
+        final Pattern freePattern = Pattern.compile("^Mem:\\s* ([0-9]+.) Active, ([0-9]+.) Inact, ([0-9]+.) Wired, ([0-9]+.) Cache, ([0-9]+.) Free");
+
 
         final Handler handler = new Handler();
         handler.post(new Runnable() {
@@ -35,7 +36,7 @@ public class FreeRamController extends BaseController {
 
                 try {
 
-                    getPluginClient().executeCommandOnSession(getSessionId(), getSessionKey(), "cat /proc/meminfo", new OnSessionExecuteListener() {
+                    getPluginClient().executeCommandOnSession(getSessionId(), getSessionKey(), "top -d1 -n 0  | grep Mem", new OnSessionExecuteListener() {
 
                         private int buffers = -1;
                         private int free = -1;
@@ -53,50 +54,12 @@ public class FreeRamController extends BaseController {
                         @Override
                         public void onOutputLine(String line) {
 
-                            Matcher buffersMatcher = buffersPattern.matcher(line);
-                            Matcher freeMatcher = freePattern.matcher(line);
-                            Matcher cachedMatcher = cachedPattern.matcher(line);
 
-                            if(buffersMatcher.find()){
-                                buffers = Integer.valueOf(buffersMatcher.group(1));
-                                if(buffers > -1 && free > -1 && cached > -1){
-                                    long kb = free + buffers + cached;
-                                    if(kb > 1048576){
-                                        setText(kb / 1024 / 1024 + " GB");
-                                    } else if (kb > 1024){
-                                        setText(kb / 1024 + " MB");
-                                    } else {
-                                        setText(kb + " KB");
-                                    }
-                                }
-                            }
+                            Matcher freeMatcher = freePattern.matcher(line);
+
 
                             if(freeMatcher.find()){
-                                free = Integer.valueOf(freeMatcher.group(1));
-                                if(buffers > -1 && free > -1 && cached > -1){
-                                    long kb = free + buffers + cached;
-                                    if(kb > 1048576){
-                                        setText(kb / 1024 / 1024 + " GB");
-                                    } else if (kb > 1024){
-                                        setText(kb / 1024 + " MB");
-                                    } else {
-                                        setText(kb + " KB");
-                                    }
-                                }
-                            }
-
-                            if(cachedMatcher.find()){
-                                cached = Integer.valueOf(cachedMatcher.group(1));
-                                if(buffers > -1 && free > -1 && cached > -1){
-                                    long kb = free + buffers + cached;
-                                    if(kb > 1048576){
-                                        setText(kb / 1024 / 1024 + " GB");
-                                    } else if (kb > 1024){
-                                        setText(kb / 1024 + " MB");
-                                    } else {
-                                        setText(kb + " KB");
-                                    }
-                                }
+                                setText(freeMatcher.group(5));
                             }
 
                         }

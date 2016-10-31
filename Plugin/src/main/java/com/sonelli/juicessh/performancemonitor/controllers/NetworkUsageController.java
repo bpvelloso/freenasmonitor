@@ -29,7 +29,17 @@ public class NetworkUsageController extends BaseController {
         lo: 22868206326 75472541    0    0    0     0          0         0 22868206326 75472541    0    0    0     0       0          0
         */
 
-        final Pattern networkUsagePattern = Pattern.compile("^\\s*([a-z0-9]+):\\s*([0-9]+)\\s*([0-9]+)\\s*([0-9]+)\\s*([0-9]+)\\s*([0-9]+)\\s*([0-9]+)\\s*([0-9]+)\\s*([0-9]+)\\s*([0-9]+)");
+
+        /*
+        input        (Total)           output
+   packets  errs idrops      bytes    packets  errs      bytes colls
+         7     0     0        624          8     0        816     0
+        * */
+
+
+        //final Pattern networkUsagePattern = Pattern.compile("^\\s*([a-z0-9]+):\\s*([0-9]+)\\s*([0-9]+)\\s*([0-9]+)\\s*([0-9]+)\\s*([0-9]+)\\s*([0-9]+)\\s*([0-9]+)\\s*([0-9]+)\\s*([0-9]+)");
+
+        final Pattern networkUsagePattern = Pattern.compile("^\\s* ([0-9]+.?)\\s*([0-9]+.?)\\s*([0-9]+.?)\\s*([0-9]+.?)\\s*([0-9]+.?)\\s*([0-9]+.?)\\s*([0-9]+.?)\\s*([0-9]+.?)\\s*");
 
         final AtomicLong lastCheck = new AtomicLong(0);
         final AtomicLong lastTotal = new AtomicLong(0);
@@ -40,7 +50,7 @@ public class NetworkUsageController extends BaseController {
             public void run() {
 
                 try {
-                    getPluginClient().executeCommandOnSession(getSessionId(), getSessionKey(), "cat /proc/net/dev", new OnSessionExecuteListener() {
+                    getPluginClient().executeCommandOnSession(getSessionId(), getSessionKey(), "netstat -i -w 1 -q 1 -h", new OnSessionExecuteListener() {
 
                         // Store the devices and the number of rx/tx bytes combined
                         HashMap<String, Long> devices = new HashMap<>();
@@ -50,7 +60,7 @@ public class NetworkUsageController extends BaseController {
                             switch(exitCode){
                                 case 0:
 
-                                    // Add up all found devices bytes
+                                    /*// Add up all found devices bytes
                                     long total = 0;
                                     for(String device: devices.keySet()){
                                         total += devices.get(device);
@@ -82,7 +92,7 @@ public class NetworkUsageController extends BaseController {
                                     }
 
                                     lastTotal.set(total);
-                                    lastCheck.set(System.currentTimeMillis());
+                                    lastCheck.set(System.currentTimeMillis());*/
                                     break;
                                 case 127:
                                     setText(getString(R.string.error));
@@ -94,9 +104,9 @@ public class NetworkUsageController extends BaseController {
                         public void onOutputLine(String line) {
                             Matcher networkUsageMatcher = networkUsagePattern.matcher(line);
                             if(networkUsageMatcher.find()){
-                                long rx = Long.valueOf(networkUsageMatcher.group(2));
-                                long tx = Long.valueOf(networkUsageMatcher.group(10));
-                                devices.put(networkUsageMatcher.group(1), rx + tx);
+                                String rx = networkUsageMatcher.group(4);
+                                String tx = networkUsageMatcher.group(7);
+                                setText("O:"+rx+"/I:"+tx);
                             }
                         }
 
