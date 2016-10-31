@@ -18,7 +18,7 @@ public class DiskUsageController extends BaseController {
     public DiskUsageController(Context context) {
         super(context);
     }
-
+    public int max=0;
     @Override
     public BaseController start() {
         super.start();
@@ -37,7 +37,7 @@ public class DiskUsageController extends BaseController {
                     //getPluginClient().executeCommandOnSession(getSessionId(), getSessionKey(), "df | grep ' /$'", new OnSessionExecuteListener() {
                     getPluginClient().executeCommandOnSession(getSessionId(), getSessionKey(), "df -hct zfs | grep /mnt/", new OnSessionExecuteListener() {
 
-                        public int max=0;
+
 
                         @Override
                         public void onCompleted(int exitCode) {
@@ -55,10 +55,10 @@ public class DiskUsageController extends BaseController {
 
                                 for(int i=0; i<diskUsageMatcher.groupCount(); i++ ){
                                     int valor = Integer.valueOf((diskUsageMatcher.group(i).split("%"))[0]);
-                                    if(valor>this.max)
-                                        this.max =valor;
+                                    if(valor>max)
+                                        max =valor;
                                 }
-                                setText(this.max+"%");
+                                setText(max+"%");
                             }
                         }
 
