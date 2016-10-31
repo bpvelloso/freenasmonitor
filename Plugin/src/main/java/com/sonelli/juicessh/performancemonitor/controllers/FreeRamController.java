@@ -25,8 +25,8 @@ public class FreeRamController extends BaseController {
 
         // Compile the regex patterns outside of the menu_main loop (cpu heavy)
         // Mem: 326M Active, 320M Inact, 506M Wired, 7404K Cache, 2744M Free
-
-        final Pattern freePattern = Pattern.compile("^Mem:\\s* ([0-9]+.) Active, ([0-9]+.) Inact, ([0-9]+.) Wired, ([0-9]+.) Cache, ([0-9]+.) Free");
+        // Mem: 385M Active, 255M Inact, 3121M Wired, 142M Free
+        final Pattern freePattern = Pattern.compile("^Mem:\\s*.+, ([0-9]+.) Free");
 
 
         final Handler handler = new Handler();
@@ -53,13 +53,13 @@ public class FreeRamController extends BaseController {
                         }
                         @Override
                         public void onOutputLine(String line) {
-
+                            Log.v("Memory returns",line);
 
                             Matcher freeMatcher = freePattern.matcher(line);
 
 
                             if(freeMatcher.find()){
-                                setText(freeMatcher.group(5));
+                                setText(freeMatcher.group(1));
                             }
 
                         }

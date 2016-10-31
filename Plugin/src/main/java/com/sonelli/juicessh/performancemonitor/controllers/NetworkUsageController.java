@@ -13,6 +13,8 @@ import java.util.regex.Pattern;
 
 public class NetworkUsageController extends BaseController {
 
+    public boolean showUpload=false;
+
     public static final String TAG = "NetworkUsageController";
     public NetworkUsageController(Context context) {
         super(context);
@@ -39,7 +41,7 @@ public class NetworkUsageController extends BaseController {
 
         //final Pattern networkUsagePattern = Pattern.compile("^\\s*([a-z0-9]+):\\s*([0-9]+)\\s*([0-9]+)\\s*([0-9]+)\\s*([0-9]+)\\s*([0-9]+)\\s*([0-9]+)\\s*([0-9]+)\\s*([0-9]+)\\s*([0-9]+)");
 
-        final Pattern networkUsagePattern = Pattern.compile("^\\s* ([0-9]+.?)\\s*([0-9]+.?)\\s*([0-9]+.?)\\s*([0-9]+.?)\\s*([0-9]+.?)\\s*([0-9]+.?)\\s*([0-9]+.?)\\s*([0-9]+.?)\\s*");
+        final Pattern networkUsagePattern = Pattern.compile("^\\s* ([0-9|\\.]+.?)\\s*([0-9|\\.]+.?)\\s*([0-9|\\.]+.?)\\s*([0-9|\\.]+.?)\\s*([0-9|\\.]+.?)\\s*([0-9|\\.]+.?)\\s*([0-9|\\.]+.?)\\s*([0-9|\\.]+.?)\\s*");
 
         final AtomicLong lastCheck = new AtomicLong(0);
         final AtomicLong lastTotal = new AtomicLong(0);
@@ -51,6 +53,7 @@ public class NetworkUsageController extends BaseController {
 
                 try {
                     getPluginClient().executeCommandOnSession(getSessionId(), getSessionKey(), "netstat -i -w 1 -q 1 -h", new OnSessionExecuteListener() {
+
 
                         // Store the devices and the number of rx/tx bytes combined
                         HashMap<String, Long> devices = new HashMap<>();
@@ -102,11 +105,20 @@ public class NetworkUsageController extends BaseController {
                         }
                         @Override
                         public void onOutputLine(String line) {
+                            Log.v("Network returns: ",line);
                             Matcher networkUsageMatcher = networkUsagePattern.matcher(line);
                             if(networkUsageMatcher.find()){
                                 String rx = networkUsageMatcher.group(4);
                                 String tx = networkUsageMatcher.group(7);
-                                setText("O:"+rx+"/I:"+tx);
+
+                                if(showUpload){
+                                    showUpload=false;
+                                    setText(tx+"(UP)");
+                                }else{
+                                    showUpload=true;
+                                    setText(rx+"(DW)");
+                                }
+
                             }
                         }
 

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Performance Monitor</string>
+    <string name="app_name">FreeNAS Console Monitor</string>
     <string name="title_activity_about">About</string>
-    <string name="app_about">This JuiceSSH plugin monitors performance statistics on Linux based systems.\n\nIt works by starting a background JuiceSSH session and running various commands on a periodic basis to obtain the metrics required.\n\nCurrently this plugin has been tested with Ubuntu and RedHat Enterprise Linux, however this plugin is open source and freely available on Github. If you\'d like to add support for other operating systems, please take a look at the github page and submit a pull request.\n\nhttps://github.com/sonelli/juicessh-performancemonitor\n\nContributors:\n\nMany thanks to hwding for updating this plugin to it\'s new Material theme.</string>
-    <string name="app_url">https://github.com/Sonelli/juicessh-performancemonitor</string>
+    <string name="app_about">This JuiceSSH plugin monitors performance statistics on FreeNAS based systems.\n\nIt works by starting a background JuiceSSH session and running various commands on a periodic basis to obtain the metrics required.\n\nCurrently this plugin has been tested with Ubuntu and RedHat Enterprise Linux, however this plugin is open source and freely available on Github. If you\'d like to add support for other operating systems, please take a look at the github page and submit a pull request.\n\nhttps://github.com/sonelli/juicessh-performancemonitor\n\nContributors:\n\nMany thanks to hwding for updating this plugin to it\'s new Material theme.</string>
+    <string name="app_url">Based on: https://github.com/Sonelli/juicessh-performancemonitor</string>
     <string name="app_package">com.sonelli.juicessh.performancemonitor</string>
     <string name="connect">Connect</string>
     <string name="please_wait">Please wait…</string>
