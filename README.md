@@ -1,25 +1,35 @@
 JuiceSSH Plugin: Performance Monitor
 ===========================
 
-A JuiceSSH plugin for monitoring linux servers using the JuiceSSH Plugin SDK.
+A JuiceSSH plugin for monitoring FreeNAS servers using the JuiceSSH Plugin SDK.
 
-![screenshot](http://i.imgur.com/uDSJRIr.png?1)
+![screenshot](screenshot.png)
 
-This plugin will connect to your choice of JuiceSSH connection and execute commands to monitor the performance of the server.
+This plugin will connect to your choice of JuiceSSH connection and execute commands to monitor the
+performance of the FreeNAS server.
 
-For details of how the various stats are discovered check out the following classes:
+The app also provide Wake on Lan feature and a shutdown button.
 
-[CPU checks](Plugin/src/main/java/com/sonelli/juicessh/performancemonitor/controllers/CpuUsageController.java)
+ABOUT:
 
-[RAM checks](Plugin/src/main/java/com/sonelli/juicessh/performancemonitor/controllers/FreeRamController.java)
+This JuiceSSH plugin monitors performance statistics on FreeNAS based systems.
 
-[Load Avg checks](Plugin/src/main/java/com/sonelli/juicessh/performancemonitor/controllers/LoadAverageController.java)
+It works by starting a background JuiceSSH session and running various commands on a periodic basis
+to obtain the metrics required.
 
-[Network checks](Plugin/src/main/java/com/sonelli/juicessh/performancemonitor/controllers/NetworkUsageController.java)
+In order to use the wake on lan functionality you must provide  the correct values on the
+Menu->Settings. For the shutdown functionality the ssh user must be in operator group.
 
-[Disk checks](Plugin/src/main/java/com/sonelli/juicessh/performancemonitor/controllers/DiskUsageController.java)
+Currently this plugin has been tested with FreeNAS 9, however this plugin is open source and
+freely available on Github.
+
+  Please take a look at the github page.
+          https://github.com/bpvelloso/freenasmonitor
 
 
-For details of the JuiceSSH Plugin SDK, it's capabilities, security information and how to get started with writing a Plugin please check our [FAQ](http://juicessh.com/faq)
+  This project was based on JuiceSSH Performance Monitor Plugin:
+          https://github.com/sonelli/juicessh-performancemonitor.
 
-Feel free to fork/extend/contribute to this plugin!
+
+Thank you,
+bpv.dev@gmail.com
