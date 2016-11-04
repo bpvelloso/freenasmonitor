@@ -7,6 +7,12 @@
     <color name="dashboard_light_orange">#FFFFA440</color>
     <color name="dashboard_purple">#963d6a</color>
     <color name="dashboard_lime">#8cb83f</color>
+    <color name="dashboard_cpu_gray">#B0B0B0</color>
+    <color name="dashboard_ram_gray">#5F5F5F</color>
+    <color name="dashboard_load_gray">#AEAEAE</color>
+    <color name="dashboard_net_gray">#5A5A5A</color>
+    <color name="dashboard_disk_gray">#8e8e8e</color>
+    <color name="dashboard_button_gray">#999999</color>
     <color name="black">#000000</color>
     <color name="white">#FFFFFF</color>
     <color name="trans_white">#88FFFFFF</color>

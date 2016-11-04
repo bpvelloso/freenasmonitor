@@ -2,5 +2,5 @@
 <shape
     xmlns:android="http://schemas.android.com/apk/res/android">
     <corners android:radius="2dp" />
-    <solid android:color="@color/dashboard_lime" />
+    <solid android:color="@color/dashboard_load_gray" />
 </shape>
